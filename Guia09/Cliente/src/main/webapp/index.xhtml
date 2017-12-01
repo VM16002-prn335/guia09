@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <f:view>
+            <h:form id="tabla">
+                <h1 align="center"><h:outputText value="Usuarios"/></h1>
+                <p:dataTable value="#{usuarioBean.listaUsaurio}" var="item" paginator="true" 
+                             rows="5" rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{usuarioBean.usuarioEntity}" rowKey="#{item.idUsuario}" >
+                    <p:ajax event="rowSelect" listener="#{usuarioBean.onRowSelect}" update=":formulario"/>
+                    <p:column sortBy="#{item.idUsuario}">
+                        <f:facet name="header">
+                            <h:outputText value="IdUsuario"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idUsuario}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="FechaNacimiento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fechaNacimiento}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Activo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.activo}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Comentarios"/>
+                        </f:facet>
+                        <h:outputText value="#{item.comentarios}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Username"/>
+                        </f:facet>
+                        <h:outputText value="#{item.username}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Password"/>
+                        </f:facet>
+                        <h:outputText value="#{item.password}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+        <f:view>
+            <h:form id="formulario" >
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <div align="center">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Nombres:" for="nombres" />
+                        <p:inputText id="nombres" value="#{usuarioBean.usuarioEntity.nombres}" title="Nombres" required="true" requiredMessage="Los nombres son requeridos."/>
+                        <p:outputLabel value="Apellidos:" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{usuarioBean.usuarioEntity.apellidos}" title="Apellidos" required="true" requiredMessage="Los apellidos son requeridos."/>
+                        <p:outputLabel value="FechaNacimiento:" for="fechaNacimiento" />
+                        <p:inputMask  id="fechaNacimiento" value="#{usuarioBean.usuarioEntity.fechaNacimiento}" required="true" mask="9999-99-99" requiredMessage="Fecha de nacimiento es requerida.">
+                            <f:convertDateTime type="date" pattern="yyyy-MM-dd"/>
+                        </p:inputMask>
+                        <p:outputLabel value="Activo:" for="activo" />
+                        <p:selectBooleanCheckbox id="activo" value="#{usuarioBean.usuarioEntity.activo}" />
+                        <p:outputLabel value="Comentarios:" for="comentarios" />
+                        <p:inputText id="comentarios" value="#{usuarioBean.usuarioEntity.comentarios}" title="Comentarios" />
+                        <p:outputLabel value="Username:" for="username" />
+                        <p:inputText id="username" value="#{usuarioBean.usuarioEntity.username}" title="Username" required="true" requiredMessage="El nombre de usuario es requerido."/>
+                        <p:outputLabel value="Password:" for="password" />
+                        <p:inputText id="password" value="#{usuarioBean.usuarioEntity.password}" title="Password" required="true" requiredMessage="La contrase;a es requerida."/>
+                    </p:panelGrid>
+                    <p:panel visible="#{!usuarioBean.btnVisible}">
+                        <p:commandButton value="Agregar" actionListener="#{usuarioBean.crearReg()}" update="@all"/>
+                        <p:commandButton value="Limpiar" type="reset"/>
+                    </p:panel>
+                    <p:panel visible="#{usuarioBean.btnVisible}">
+                        <p:commandButton value="Modificar" actionListener="#{usuarioBean.editarReg()}" update="@all">
+                        </p:commandButton>
+                        <p:commandButton value="Eliminar" actionListener="#{usuarioBean.eliminarReg()}" update="@all"/>
+                        <p:commandButton value="Cancelar" immediate="true">
+                            <p:ajax listener="#{usuarioBean.btnCancelar()}" update="@form :tabla"/>
+                        </p:commandButton>
+                    </p:panel>
+                </div>
+            </h:form>
+        </f:view>
+        <br/>
+        <p align="left" style="size: 10px">Bryan Villafuerte copyright :v</p>
+        
+    </h:body>
+</html>
+
